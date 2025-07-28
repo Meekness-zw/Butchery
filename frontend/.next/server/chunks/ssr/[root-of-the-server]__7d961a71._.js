@@ -138,7 +138,7 @@ function UserDashboard() {
     });
     const [orderSuccess, setOrderSuccess] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get("http://localhost:8000/api/products/").then((res)=>setProducts(res.data));
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get("https://butchery-1.onrender.com/api/products/").then((res)=>setProducts(res.data));
     }, []);
     const addToCart = (product)=>{
         setCart((prev)=>{
@@ -172,7 +172,7 @@ function UserDashboard() {
             products: cart.map((item)=>item.product.id),
             total_price: cart.reduce((sum, item)=>sum + parseFloat(item.product.price) * item.quantity, 0)
         };
-        await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].post("http://localhost:8000/api/orders/", order);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].post("https://butchery-1.onrender.com/api/orders/", order);
         setOrderSuccess(true);
         setCart([]);
         setShowCheckout(false);
