@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Image from "next/image";
 
 interface Product {
   id: number;
@@ -76,7 +77,9 @@ export default function UserDashboard() {
           <ul className="space-y-6">
             {products.map(product => (
               <li key={product.id} className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 shadow-md hover:shadow-lg transition-shadow">
-                {product.image && <img src={product.image} alt={product.name} className="w-32 h-32 object-cover rounded-xl border border-gray-200 shadow-sm" />}
+                {product.image && (
+                  <Image src={product.image} alt={product.name} width={128} height={128} className="w-32 h-32 object-cover rounded-xl border border-gray-200 shadow-sm" />
+                )}
                 <div className="flex-1 w-full">
                   <div className="font-bold text-xl text-red-900 mb-1">{product.name}</div>
                   <div className="text-gray-600 mb-2">{product.description}</div>

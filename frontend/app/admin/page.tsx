@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import axios from "axios";
+import type { AxiosError } from "axios";
 
 interface Product {
   id: number;
@@ -23,7 +25,6 @@ export default function AdminPage() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const editFileInputRef = useRef<HTMLInputElement>(null);
 
   // Simple admin credentials (in real app, this would be in backend)
   const ADMIN_CREDENTIALS = { username: "admin", password: "butchery123" };
@@ -84,7 +85,7 @@ export default function AdminPage() {
       formData.append("quantity", form.quantity);
       if (form.image) formData.append("image", form.image);
       
-      const response = await axios.post("https://butchery-1.onrender.com/api/products/", formData, {
+      await axios.post("https://butchery-1.onrender.com/api/products/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setForm({ name: "", description: "", price: "", quantity: "", image: null });
@@ -93,13 +94,14 @@ export default function AdminPage() {
       fetchProducts();
       setTimeout(() => setSuccess(""), 3000);
       window.scrollTo({ top: 0, behavior: "smooth" });
-    } catch (error: any) {
+    } catch (error: unknown) {
       let message = "Error adding product. Please try again.";
-      if (error.response && error.response.data) {
-        if (typeof error.response.data === "string") {
-          message = error.response.data;
-        } else if (typeof error.response.data === "object") {
-          message = Object.values(error.response.data).flat().join(" ");
+      const err = error as AxiosError<unknown>;
+      if (err.response && err.response.data) {
+        if (typeof err.response.data === "string") {
+          message = err.response.data;
+        } else if (typeof err.response.data === "object") {
+          message = Object.values(err.response.data).flat().join(" ");
         }
       }
       setError(message);
@@ -244,7 +246,9 @@ export default function AdminPage() {
         <ul className="space-y-6">
           {products.map(product => (
             <li key={product.id} className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 shadow-md hover:shadow-lg transition-shadow">
-              {product.image && <img src={product.image} alt={product.name} className="w-32 h-32 object-cover rounded-xl border border-gray-200 shadow-sm" />}
+              {product.image && (
+                <Image src={product.image} alt={product.name} width={128} height={128} className="w-32 h-32 object-cover rounded-xl border border-gray-200 shadow-sm" />
+              )}
               <div className="flex-1 w-full">
                 <div className="font-bold text-xl text-red-900 mb-1">{product.name}</div>
                 <div className="text-gray-600 mb-2">{product.description}</div>
